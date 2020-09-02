@@ -1,3 +1,20 @@
-h1{
-	color: blue;
+*{
+	box-sizing: border-box;
+}
+
+#grid{
+	/*each square will be 20 x 20px */
+	width: 200px;
+	height: 400px;
+	background-color: pink;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+#grid div{
+	width: 20px;
+	height: 20px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: grey;
 }
