@@ -18,3 +18,7 @@
 	border-width: 1px;
 	border-color: grey;
 }
+
+.activePiece{
+	background-color: blue;
+}
