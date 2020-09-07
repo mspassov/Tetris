@@ -77,24 +77,22 @@ document.addEventListener('DOMContentLoaded', function(){
 		deletePiece();
 		startPos = startPos + offset;
 		displayPiece();
-		//freezePiece();
+		freezePiece();
 	}
 
 	function freezePiece(){
-		if(currentPiece.some(function(i){squaresArray[startPos + i].classList.contains('taken')})){
-			currentPiece.forEach(function(i){
-				squaresArray[startPos + i].classList.add('taken');
-			});
+		if(currentPiece.some(index => squaresArray[startPos + index].classList.contains('taken'))){
+			currentPiece.forEach(index => squaresArray[startPos + index].classList.add('taken'))
+
+			var randomNum = Math.floor(Math.random()*gamePieces.length);
+			var currentPiece = gamePieces[randomNum][currentRotation];
+			startPos = 3;
+			displayPiece();
 		}
 
-		//generate new game piece
-		randomNum = Math.floor(Math.random()*gamePieces.length);
-		currentPiece = gamePieces[randomNum][currentRotation];
-		startPos = 4;
-		displayPiece();
 	}
 
-	//timerID = setInterval(moveDownPiece, 100);
+	timerID = setInterval(moveDownPiece, 100);
 
 
 
