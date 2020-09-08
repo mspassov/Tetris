@@ -2,6 +2,10 @@
 	box-sizing: border-box;
 }
 
+.container{
+	display: flex;
+}
+
 .grid{
 	width: 200px;
 	height: 400px;
@@ -18,4 +22,24 @@
 
 .activePiece{
 	background-color: blue;
+}
+
+.floor{
+	background-color: brown;
+}
+
+.mini-grid{
+	width: 80px;
+	height: 80px;
+	display: flex;
+	flex-wrap: wrap;
+	background-color: pink;
+	margin-left: 60px;
+}
+
+.mini-grid div{
+	width: 20px;
+	height: 20px;
+	border: 1px solid grey;
+
 }

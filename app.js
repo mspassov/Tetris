@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	var gameScore = document.querySelector('#score');
 	var startButton = document.querySelector('#startBtn');
 	const offset = 10;
+	var nextRandom = 0;
 	
 	//Game pieces
 	const Lpiece = [
@@ -92,11 +93,13 @@ document.addEventListener('DOMContentLoaded', function(){
 			currentPiece.forEach(index => squares[startPos + index].classList.add('taken'))
 
 			//grab new piece
-			randomNum = Math.floor(Math.random()*gamePieces.length);
+			randomNum = nextRandom;
+			nextRandom = Math.floor(Math.random()*gamePieces.length);
 			currentRotation = 0;
 			currentPiece = gamePieces[randomNum][currentRotation];
 			startPos = 3;
 			displayPiece();
+			displayNext();
 		}
 	}
 
@@ -141,8 +144,25 @@ document.addEventListener('DOMContentLoaded', function(){
 		displayPiece();
 	}
 	
+	//timerID = setInterval(moveDown, 100);
 
+	var nextSquares = document.querySelectorAll('.mini-grid div');
+	var nextOffset = 4;
+	var displayIndex = 0;
 
-	//timerID = setInterval(moveDown, 1000);
+	const nextPieces = [
+    [1, nextOffset+1, nextOffset*2+1, 2], //L
+    [0, nextOffset, nextOffset+1, nextOffset*2+1], //Z
+    [1, nextOffset, nextOffset+1, nextOffset+2], //T
+    [0, 1, nextOffset, nextOffset+1], //O
+    [1, nextOffset+1, nextOffset*2+1, nextOffset*3+1] //I
+
+  	]
+
+	function displayNext(){
+		nextSquares.forEach(sq => sq.classList.remove('activePiece'));
+		nextPieces[nextRandom].forEach(index => nextSquares[displayIndex + index].classList.add('activePiece'));
+
+	}
 
 });
