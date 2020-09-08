@@ -1,20 +1,11 @@
 document.addEventListener('DOMContentLoaded', function(){
-	//Create the grid
-	var container = document.getElementById('grid');
-	for(var i=0; i<190; i++){
-		container.innerHTML += '<div></div>';
-	}
 
-	for(var i=0; i<10; i++){
-		container.innerHTML += '<div class="taken"></div>';
-	}
-
-	const grid = document.querySelector('#grid');
-	var squaresArray = Array.from(document.querySelectorAll('#grid div'));
+	const grid = document.querySelector('.grid');
+	var squares = Array.from(document.querySelectorAll('.grid div'));
 	var gameScore = document.querySelector('#score');
-	var startButton = document.querySelector('#startGame');
+	var startButton = document.querySelector('#startBtn');
 	const offset = 10;
-
+	
 	//Game pieces
 	const Lpiece = [
 		[1, offset+1, offset*2+1, 2],	//this represents each configuration of the piece
@@ -52,53 +43,106 @@ document.addEventListener('DOMContentLoaded', function(){
 	]
 
 	var gamePieces = [Lpiece, Zpiece, Tpiece, Opiece, iPiece];
+
 	var startPos = 3;
 	var randomNum = Math.floor(Math.random()*gamePieces.length);
 	var currentRotation = 0;
 	var currentPiece = gamePieces[randomNum][currentRotation];	//grab a random piece
 
-	//create function to draw the different game pieces
+	//create function to draw the game piece
 	function displayPiece(){
-		currentPiece.forEach(function(i){
-			squaresArray[startPos + i].classList.add('activePiece');
-		});
-
+		currentPiece.forEach(i => squares[startPos + i].classList.add('activePiece'));
 	}
 
 	//create function to delete the game piece, so that it can move down
 	function deletePiece(){
-		currentPiece.forEach(function(i){
-			squaresArray[startPos + i].classList.remove('activePiece');
-		});
+		currentPiece.forEach(i => squares[startPos + i].classList.remove('activePiece'));
 	}
+
 	displayPiece();
 
-	function moveDownPiece(){
-		deletePiece();
-		startPos = startPos + offset;
-		displayPiece();
-		freezePiece();
-	}
-
-	function freezePiece(){
-		if(currentPiece.some(index => squaresArray[startPos + index].classList.contains('taken'))){
-			currentPiece.forEach(index => squaresArray[startPos + index].classList.add('taken'))
-
-			var randomNum = Math.floor(Math.random()*gamePieces.length);
-			var currentPiece = gamePieces[randomNum][currentRotation];
-			startPos = 3;
-			displayPiece();
+	//assigning keycodes to Tetris
+	function movement(e){
+		if(e.keyCode === 37){
+			moveLeft();
+		}
+		else if (e.keyCode === 38) {
+			rotate();
+		}
+		else if (e.keyCode === 39) {
+			moveRight();
+		}
+		else if(e.keyCode === 40){
+			moveDown();
 		}
 
 	}
-
-	timerID = setInterval(moveDownPiece, 100);
-
+	document.addEventListener('keyup', movement);
 
 
+	function moveDown(){
+		deletePiece();
+		startPos += offset;
+		displayPiece();
+		freeze();
+	}
+
+	function freeze(){
+		if(currentPiece.some(index => squares[startPos + index + offset].classList.contains('taken'))){
+			currentPiece.forEach(index => squares[startPos + index].classList.add('taken'))
+
+			//grab new piece
+			randomNum = Math.floor(Math.random()*gamePieces.length);
+			currentRotation = 0;
+			currentPiece = gamePieces[randomNum][currentRotation];
+			startPos = 3;
+			displayPiece();
+		}
+	}
+
+	function moveLeft(){
+		deletePiece();
+		var leftEdgeCheck = currentPiece.some(index => (startPos + index) % offset === 0);
+
+		if(!leftEdgeCheck){
+			startPos -= 1;
+		}
+
+		if(currentPiece.some(index => squares[startPos + index].classList.contains('taken'))){
+			startPos += 1;
+		}
+
+		displayPiece();
+	}
+	
+	function moveRight(){
+		deletePiece();
+		var checkRightEdge = currentPiece.some(index => (startPos + index) % offset === (offset - 1));
+
+		if(!checkRightEdge){
+			startPos += 1;
+		}
+
+		if(currentPiece.some(index => squares[startPos + index].classList.contains('taken'))){
+			startPos -= 1;
+		}
+
+		displayPiece();
+	}
+
+	function rotate(){
+		deletePiece();
+		currentRotation += 1;
+		if(currentRotation === currentPiece.length){
+			currentRotation = 0;
+		}
+
+		currentPiece = gamePieces[randomNum][currentRotation];
+		displayPiece();
+	}
+	
 
 
-
-
+	//timerID = setInterval(moveDown, 1000);
 
 });
